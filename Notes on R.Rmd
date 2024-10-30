@@ -1,0 +1,107 @@
+---
+title: "Notes on R"
+author: "Ahmed Eltawil"
+date: "2024-10-29"
+output: 
+  html_document: 
+    toc: true
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Special numbers
+
+- *Inf*: represents infinity = 1 / 0, it can also be used as 1 / inf = 0.
+         you can also have -inf.
+- *NaN*: represents undefined value "Not a number"; e.g. 0 / 0; can also be
+         thought as a missing value.
+
+
+# Data Types
+
+R has 5 atomic classes:
+
+- character
+- numeric ( real numbers)
+- integer
+- complex
+- logical ( True / False )
+
+The most basic object is a *Vector*
+- A vector can only contain objects of the same class
+- Exception is List, which is a vector that can contain objects of different
+  classes
+- Empty vector can be created by calling *vector()*
+
+## Vectors
+
+### Creating a vector
+
+#### 1- Using the *c()* function
+```{r, echo = TRUE}
+x1 <- c(0.5, 0.6)       ## numeric
+x2 <- c(TRUE, FALSE)    ## logical
+x3 <- c(T, F)           ## logical
+x4 <- c("a", "b", "c")  ## character
+x5 <- 9:29              ## integer
+x6 <- c(1+0i, 2+4i)     ## complex
+```
+#### 2- Using the *vector()* function
+```{r}
+x_v <- vector("numeric", 10)
+x_v
+```
+
+### Mixing Objects
+When mixing different classes in one object, all must convert into one common
+class
+```{r}
+y <- c(1.7, "a")    ## character
+y <- c(TRUE, 2)     ## numeric
+y <- c("a", TRUE)   ## character
+```
+
+### Explicit Coercion
+Object can be explicitly coerced from one type to another using the **as. \***
+functions if available
+Example:
+```{r}
+x <- 0:6
+class(x)
+```
+```{r}
+class(as.numeric(x))
+```
+```{r}
+as.logical(x)
+```
+```{r}
+as.character(x)
+```
+
+On the other side, non-sensical coercion results in **NAs**
+
+```{r}
+x <- c("a", "b", "c")
+as.numeric(x)
+```
+```{r}
+as.logical(x)
+```
+```{r}
+as.complex(x)
+```
+
+## Lists
+
+A special type of vector that can contain elements of different classes
+
+```{r}
+x <- list(1, "a", TRUE, 1+4i)
+x
+```
+
+
