@@ -104,4 +104,150 @@ x <- list(1, "a", TRUE, 1+4i)
 x
 ```
 
+## Matrices
+
+A matrix is a vector with a *dimenstion* attribute, which is itself an integer
+vector of length 2 **(nrow, ncol)**
+```{r}
+m <- matrix(nrow= 2, ncol= 3)
+m
+```
+```{r}
+dim(m)
+```
+```{r}
+attributes(m) ## m has only one attribute which is dim of size 2
+```
+Matrices are constructed column-wise, so entries can be thought of starting
+in the "upper left" corner and running down the columns.
+```{r}
+m <- matrix(data=1:6, nrow= 2, ncol= 3)
+m
+```
+Matrices can be created directly also from vectors by adding *dim* attribute
+```{r}
+m <- 1:10
+m
+```
+```{r}
+dim(m) <- c(2, 5)
+m
+```
+- Cbind-ing vs Rbind-ing
+```{r}
+x <- 1:3
+y <- 10:12
+cbind(x, y)
+```
+```{r}
+rbind(x,y)
+```
+
+## Factors
+
+Factors are used to represent categorial data.
+
+- Treated specially by modeling functions *lm()* & *glm()*
+
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no"))
+x
+```
+Note that it has a special attribute which is called *Levels*
+- Levels output the available labels within the factor starting from the
+baseline level and upwards, and if the order or the levels are not given
+explicitly by the user, the R engine will arrange them alphabetically.
+
+The function table gives a frequency count of each label:
+```{r}
+table(x)
+```
+R engine assign an integers in an ascending order starting from the base level.
+The *unclass()* function return the corresponding Level number to each label:
+```{r}
+unclass(x)
+```
+The order of the Levels can be set using *Levels* argument to *factor()*.
+```{r}
+x <- factor(c("yes", "yes", "no", "yes", "no"), levels = c("yes", "no"))
+x
+```
+Not that the order of the Levels has been reversed!
+
+## Missing values
+
+Denoted by:
+
+- *NAN*: For missing mathematical operation
+- *NA* : For everything else
+- *NA* values have a class also, so there are integers NA, character NA, etc.
+- A *NAN* value is also *NA* but the converse is not true.
+
+Example:
+```{r}
+x <- c(1, 2, NA, 10, 3)
+is.na(x)
+```
+```{r}
+is.nan(x)
+```
+```{r}
+x<- c(1, 2, NaN, NA, 4)
+is.na(x)
+```
+```{r}
+is.nan(x)
+```
+
+## Data Frames
+
+Used to discribe tabular data
+
+- Special type of list, where each element must have the same length
+- Each element can be thought of as a column and the length of each element
+  of this list is the number of rows.
+- Unlike matrices, data frames can store different classes of objects in each
+  column.
+- Have special attribute called: *row.names*, most of the time it is just: 1, 2,
+  3, ....
+- Usually created by calling *read.table()* or *read.csv()*
+- Can be converted to a matrix by calling *data.matrix()* but classes will be
+  unified (resulted classes will be unexpected)
+  
+  Example:
+```{r}
+x <- data.frame(foo= 1: 4, bar= c(T, T, F, F))
+x
+```
+```{r}
+nrow(x)
+```
+```{r}
+ncol(x)
+```
+
+## Names
+
+R objects can also have names, which is very helpful for writing readable code
+and self-describing objects.
+
+```{r}
+x <- 1:3
+names(x)
+```
+```{r}
+names(x) <- c("foo", "bar", "norf")
+x
+```
+Lists can also have names
+```{r}
+x <- list(a=1, b=2, c=3)
+x
+```
+For matrices, names are basicall, the rows and columns names:
+```{r}
+m <- matrix(data=1:4, nrow=2, ncol=2)
+dimnames(m) <- list(c('a', 'b'), c('c', 'd'))
+m
+```
 
