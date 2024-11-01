@@ -251,3 +251,70 @@ dimnames(m) <- list(c('a', 'b'), c('c', 'd'))
 m
 ```
 
+# Reading data
+
+Most used APIs for reading data:
+read.table
+read.csv, same as read.table but in this case the separator is '*,*' by default.
+
+## Estimating needed memory
+
+First, to know if my Hardware is capable of laoding the data, do the following
+calculation for a rough estimation on the needed memory:
+$(nrow*ncol*8)*2$
+Example: if we have a table consist of 1.500,000 rows and 120 columns, then
+memory needed is equal to 2.68 GB
+
+## Reading data optimization
+
+Reading large data can be a huge overload on the processor.
+To optimize the procedure, try the following:
+
+- Read the help page for read.table, which contains many hints.
+- Make a rough calculation for the needed memory to be stored.
+- Set *comment.char*= "", if there is no comment lines in your file.
+- Use the *colClasses* argument to specify the class for each column. Can make
+it run much faster, often twice as fast. If all columns are numeric, then you
+can just set *colClasses* = "numeric"
+
+# Writing Data
+
+Here we have two functions that write out data in textual form: dumping
+and dputing. It's advantage over a table or csv file, is that it can
+preserve the metadata (sacrificing some readability), so that another user
+doesn't have to specify it all over again.
+
+## Dputing R object
+
+Can be used on a single R object
+```{r}
+y <- data.frame(a= 1, b= "a")
+dput(y)
+```
+```{r}
+dput(y, file= "y.R")
+```
+
+```{r}
+new.y <- dget("y.R")
+new.y
+```
+
+## Dumping R objects
+
+Can be used on multiple R objects
+```{r}
+x <- "foo"
+y <- data.frame(a= 1, b= "a")
+dump(c("x", "y"), file="data.R")
+rm(x,y)
+```
+Read the output again:
+```{r}
+source("data.R")
+y
+```
+```{r}
+x
+```
+
