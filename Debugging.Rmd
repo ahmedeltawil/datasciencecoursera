@@ -1,0 +1,30 @@
+---
+title: "Debugging in R"
+author: "Ahmed Eltawil"
+date: "2024-11-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Debugging through messages
+
+```{r}
+printmessage <- function(x) {
+  if(is.na(x))
+    print("x is a missing value!")
+  else if(x > 0)
+    print("x is greater than 0")
+  else
+    print("x is less than or equal to 0")
+  invisible(x)
+}
+
+printmessage(NaN)
+printmessage(1)
+printmessage(NA)
+printmessage(-1)
+```
+
