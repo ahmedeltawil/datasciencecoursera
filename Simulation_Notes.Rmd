@@ -1,0 +1,23 @@
+---
+title: "Simulation"
+author: "Ahmed Eltawil"
+date: "2024-11-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Generating Random Numbers
+
+Functions for probability distributions in R
+
+- *rnorm*: generate random normal variates with a given mean and standard
+deviation.
+- *dnorm*: evaluate the normal probability denisty (with a given mean/SD) at a
+point (or vector of points)
+- *pnorm*: evaluate the cumulative distribution function for a Normal
+distribution.
+- *rpois*: generate a random Poisson variates with a given rate.
+
