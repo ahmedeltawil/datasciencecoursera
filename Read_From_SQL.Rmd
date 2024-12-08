@@ -1,0 +1,57 @@
+---
+title: "R_mySql"
+output: html_document
+date: "2024-12-08"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Connect to MySql web server
+
+```{r}
+library("RMySQL")
+ucscDB <- dbConnect(MySQL(), user="genome", host="genome-mysql.cse.ucsc.edu")
+result <- dbGetQuery(ucscDB, "show databases;"); dbDisconnect(ucscDB);
+```
+
+## Connect to a specific database
+
+```{r}
+hg19 <- dbConnect(MySQL(), user= "genome", db="hg19",
+                  host="genome-mysql.cse.ucsc.edu")
+allTables <- dbListTables(hg19)
+length(allTables)
+```
+
+```{r}
+allTables[1:5]
+```
+```{r}
+dbListFields(hg19, "affyU133Plus2")
+```
+```{r}
+dbGetQuery(hg19, "select count(*) from affyU133Plus2")
+```
+```{r}
+affyData <- dbReadTable(hg19, "affyU133Plus2")
+```
+## Select specific subset out of a DB table
+```{r}
+query <- dbSendQuery(hg19, 
+    "select * from affyU133Plus2 where misMatches between 1 and 3")
+affyMis <- fetch(query); quantile(affyMis$misMatches)
+```
+### Fetch only up to N records
+```{r}
+affyMisSmall <- fetch(query, n=10); dbClearResult(query)
+```
+```{r}
+dim(affyMisSmall)
+```
+## Close the connection
+```{r}
+dbDisconnect(hg19)
+```
+
