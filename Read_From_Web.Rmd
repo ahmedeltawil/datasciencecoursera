@@ -1,0 +1,85 @@
+---
+title: "Read_From_Web"
+output: html_document
+date: "2024-12-09"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Webscrapping
+__`Webscrapping`__: Programmatically extracting data from the HTML code of
+websites.
+
+- In some cases this is against the terms of service for the website
+- Attempting to read too many pages too quickly can get your IP address
+blocked
+
+## Open connection to a website and extract the html code out of it
+
+```{r}
+con <- url("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en")
+htmlCode <- readLines(con)
+close(con)
+htmlCode
+```
+
+## Parsing html using XML library
+```{r}
+library(XML)
+library(RCurl)
+url <- "https://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en"
+htmlContent <- getURL(url)
+html <- htmlTreeParse(htmlContent, useInternalNodes = T)
+
+xpathSApply(html, "//title", xmlValue)
+```
+
+
+```{r}
+xpathSApply(html, "//td[@class='gsc_a_c']", xmlValue)
+```
+
+## Get from the httr package
+
+```{r}
+library(httr)
+html2 <- GET(url)
+content2 <- content(html2, as= "text")
+parsedHtml <- htmlParse(content2, asText= TRUE)
+xpathSApply(parsedHtml, "//title", xmlValue)
+```
+
+## Accessing websites with password
+
+```{r}
+pg1= GET("http://httpbin.org/basic-auth/user/passwd")
+pg1
+```
+
+The error __401__ is reported because the session needs to be authenticated
+first.
+Authentication credentials could be sent using the _`authenticate`_ command
+```{r}
+pg2= GET("http://httpbin.org/basic-auth/user/passwd",
+        authenticate("user", "passwd"))
+pg2
+```
+Authentication succeed!
+
+```{r}
+names(pg2)
+```
+
+# Using handles
+
+using handles is useful as it keeps cookies saved and it no need to
+re-authenticate a page several times.
+
+```{r}
+google= handle("http://google.com")
+pg1= GET(handle=google, path="/")
+pg2= GET(handle=google, path="search")
+```
+
